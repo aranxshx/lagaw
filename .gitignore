@@ -1,0 +1,102 @@
+# ===== Secrets / environment =====
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.jks
+*.keystore
+
+# ===== Flutter / Dart =====
+.dart_tool/
+.packages
+.pub/
+.pub-cache/
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+*.iml
+*.ipr
+*.iws
+coverage/
+
+# Android (Flutter)
+android/.gradle/
+android/local.properties
+android/key.properties
+android/app/debug
+android/app/profile
+android/app/release
+android/captures/
+.cxx/
+
+# iOS / macOS (Flutter)
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/Generated.xcconfig
+ios/Flutter/flutter_export_environment.sh
+macos/Pods/
+macos/Flutter/ephemeral/
+*.mobileprovision
+*.p12
+*.certSigningRequest
+
+# ===== Python / FastAPI =====
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+.Python
+*.egg-info/
+.eggs/
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.ipynb_checkpoints/
+
+# Trained model artifacts (remove these lines if the models should be committed)
+*.pkl
+*.joblib
+
+# ===== Database / local data =====
+*.sqlite3
+*.db
+*.db-journal
+supabase/.branches/
+supabase/.temp/
+
+# ===== Logs / temp =====
+*.log
+logs/
+tmp/
+temp/
+*.tmp
+*.bak
+
+# ===== IDE / editor =====
+.idea/
+*.swp
+*.swo
+*~
+
+# ===== OS files =====
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+# Linux
+.Trash-*
+
+.vscode
