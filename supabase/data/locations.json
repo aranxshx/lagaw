@@ -1,0 +1,333 @@
+[
+  {
+    "name": "San Sebastian Cathedral",
+    "description": "A historic coral-stone Catholic cathedral in downtown Bacolod, suitable for a quiet architectural visit that respects ongoing worship.",
+    "category": "heritage",
+    "vibe_tags": [
+      "heritage",
+      "photography"
+    ],
+    "address": "Jose Rizal Street, Bacolod City, Negros Occidental",
+    "latitude": 10.67035,
+    "longitude": 122.94715,
+    "opening_hours": {},
+    "estimated_cost_min": null,
+    "estimated_cost_max": null,
+    "typical_visit_duration": 25,
+    "suitable_group_types": [
+      "solo",
+      "couple",
+      "family",
+      "friends",
+      "group"
+    ],
+    "image_url": null,
+    "is_active": true
+  },
+  {
+    "name": "The Negros Museum",
+    "description": "A museum of Negros history, heritage and the arts near the provincial capitol, with exhibits that introduce local culture.",
+    "category": "museum",
+    "vibe_tags": [
+      "heritage",
+      "photography"
+    ],
+    "address": "Gatuslao Street, Bacolod City, Negros Occidental",
+    "latitude": 10.67516,
+    "longitude": 122.95032,
+    "opening_hours": {
+      "monday": [
+        {
+          "open": "09:00",
+          "close": "18:00"
+        }
+      ],
+      "tuesday": [
+        {
+          "open": "09:00",
+          "close": "18:00"
+        }
+      ],
+      "wednesday": [
+        {
+          "open": "09:00",
+          "close": "18:00"
+        }
+      ],
+      "thursday": [
+        {
+          "open": "09:00",
+          "close": "18:00"
+        }
+      ],
+      "friday": [
+        {
+          "open": "09:00",
+          "close": "18:00"
+        }
+      ],
+      "saturday": [
+        {
+          "open": "09:00",
+          "close": "18:00"
+        }
+      ]
+    },
+    "estimated_cost_min": 70,
+    "estimated_cost_max": 100,
+    "typical_visit_duration": 60,
+    "suitable_group_types": [
+      "solo",
+      "couple",
+      "family",
+      "friends",
+      "group"
+    ],
+    "image_url": null,
+    "is_active": true
+  },
+  {
+    "name": "Negros Forest Park",
+    "description": "A conservation and wildlife education center presenting native Negros species and the work of the Talarak Foundation.",
+    "category": "park",
+    "vibe_tags": [
+      "nature",
+      "photography"
+    ],
+    "address": "South Capitol Road, Bacolod City, Negros Occidental 6100",
+    "latitude": 10.67507,
+    "longitude": 122.95105,
+    "opening_hours": {},
+    "estimated_cost_min": null,
+    "estimated_cost_max": null,
+    "typical_visit_duration": 60,
+    "suitable_group_types": [
+      "solo",
+      "couple",
+      "family",
+      "friends",
+      "group"
+    ],
+    "image_url": null,
+    "is_active": true
+  },
+  {
+    "name": "Orange Project",
+    "description": "A contemporary art gallery within Mandalagan’s Art District, featuring exhibitions and work by local and visiting artists.",
+    "category": "gallery",
+    "vibe_tags": [
+      "photography",
+      "relaxing"
+    ],
+    "address": "Orange Project Building, Art District, Lopue’s Annex Building, Mandalagan, Bacolod City, Negros Occidental 6100",
+    "latitude": null,
+    "longitude": null,
+    "opening_hours": {},
+    "estimated_cost_min": null,
+    "estimated_cost_max": null,
+    "typical_visit_duration": 45,
+    "suitable_group_types": [
+      "solo",
+      "couple",
+      "friends",
+      "group"
+    ],
+    "image_url": null,
+    "is_active": true
+  },
+  {
+    "name": "Capitol Park and Lagoon",
+    "description": "A public landscape surrounding the provincial capitol lagoon, offering leafy paths and opportunities to appreciate the civic setting.",
+    "category": "park",
+    "vibe_tags": [
+      "nature",
+      "relaxing",
+      "photography"
+    ],
+    "address": "Provincial Capitol Complex, Bacolod City, Negros Occidental",
+    "latitude": 10.676,
+    "longitude": 122.95213,
+    "opening_hours": {},
+    "estimated_cost_min": null,
+    "estimated_cost_max": null,
+    "typical_visit_duration": 35,
+    "suitable_group_types": [
+      "solo",
+      "couple",
+      "family",
+      "friends",
+      "group"
+    ],
+    "image_url": null,
+    "is_active": true
+  },
+  {
+    "name": "Negros Occidental Provincial Capitol",
+    "description": "The provincial government’s prominent capitol building, an architectural focal point of central Bacolod.",
+    "category": "landmark",
+    "vibe_tags": [
+      "heritage",
+      "photography"
+    ],
+    "address": "Provincial Capitol Building, Gatuslao Street, Bacolod City, Negros Occidental 6100",
+    "latitude": 10.67647,
+    "longitude": 122.95093,
+    "opening_hours": {},
+    "estimated_cost_min": null,
+    "estimated_cost_max": null,
+    "typical_visit_duration": 20,
+    "suitable_group_types": [
+      "solo",
+      "couple",
+      "family",
+      "friends",
+      "group"
+    ],
+    "image_url": null,
+    "is_active": true
+  },
+  {
+    "name": "Cafetolyo Coffee Shop",
+    "description": "A coffee and light-refreshment stop at the provincial capitol park, associated with locally sourced coffee and casual breaks.",
+    "category": "cafe",
+    "vibe_tags": [
+      "cafe",
+      "food",
+      "relaxing"
+    ],
+    "address": "Provincial Capitol Park and Lagoon, Bacolod City, Negros Occidental",
+    "latitude": null,
+    "longitude": null,
+    "opening_hours": {},
+    "estimated_cost_min": null,
+    "estimated_cost_max": null,
+    "typical_visit_duration": 35,
+    "suitable_group_types": [
+      "solo",
+      "couple",
+      "family",
+      "friends",
+      "group"
+    ],
+    "image_url": null,
+    "is_active": true
+  },
+  {
+    "name": "Arima Restaurant",
+    "description": "An all-day restaurant at Park Inn by Radisson Bacolod serving regional and international dishes, including breakfast and later meals.",
+    "category": "restaurant",
+    "vibe_tags": [
+      "food",
+      "relaxing"
+    ],
+    "address": "Park Inn by Radisson Bacolod, Block 12 Reclamation Area, Palanca Avenue, SM City Bacolod Complex, Bacolod City, Negros Occidental 6100",
+    "latitude": null,
+    "longitude": null,
+    "opening_hours": {
+      "monday": [
+        {
+          "open": "06:00",
+          "close": "22:00"
+        }
+      ],
+      "tuesday": [
+        {
+          "open": "06:00",
+          "close": "22:00"
+        }
+      ],
+      "wednesday": [
+        {
+          "open": "06:00",
+          "close": "22:00"
+        }
+      ],
+      "thursday": [
+        {
+          "open": "06:00",
+          "close": "22:00"
+        }
+      ],
+      "friday": [
+        {
+          "open": "06:00",
+          "close": "22:00"
+        }
+      ],
+      "saturday": [
+        {
+          "open": "06:00",
+          "close": "22:00"
+        }
+      ],
+      "sunday": [
+        {
+          "open": "06:00",
+          "close": "22:00"
+        }
+      ]
+    },
+    "estimated_cost_min": null,
+    "estimated_cost_max": null,
+    "typical_visit_duration": 75,
+    "suitable_group_types": [
+      "solo",
+      "couple",
+      "family",
+      "friends",
+      "group"
+    ],
+    "image_url": null,
+    "is_active": true
+  },
+  {
+    "name": "Panaad Park and Sports Complex",
+    "description": "A provincial park and sports venue in Mansilingan used for major local events and the Panaad sa Negros Festival.",
+    "category": "park",
+    "vibe_tags": [
+      "nature",
+      "photography"
+    ],
+    "address": "Barangay Mansilingan, Bacolod City, Negros Occidental",
+    "latitude": 10.62379,
+    "longitude": 122.96481,
+    "opening_hours": {},
+    "estimated_cost_min": null,
+    "estimated_cost_max": null,
+    "typical_visit_duration": 60,
+    "suitable_group_types": [
+      "solo",
+      "couple",
+      "family",
+      "friends",
+      "group"
+    ],
+    "image_url": null,
+    "is_active": true
+  },
+  {
+    "name": "Calea Pastries & Coffee",
+    "description": "A Bacolod pastry and dessert café on 15th Street offering a stop for cakes and coffee.",
+    "category": "cafe",
+    "vibe_tags": [
+      "cafe",
+      "food",
+      "relaxing"
+    ],
+    "address": "15th Street, Bacolod City, Negros Occidental 6100",
+    "latitude": null,
+    "longitude": null,
+    "opening_hours": {},
+    "estimated_cost_min": null,
+    "estimated_cost_max": null,
+    "typical_visit_duration": 40,
+    "suitable_group_types": [
+      "solo",
+      "couple",
+      "family",
+      "friends"
+    ],
+    "image_url": null,
+    "is_active": true
+  }
+]
