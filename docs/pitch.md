@@ -335,13 +335,29 @@ users
 
 - Android app: Flutter Android APK build, distributed for testing
 
-- Public frontend URL: Flutter Web build hosted on Cloudflare Pages or Netlify, deployed automatically from the main branch through CI/CD
+- Public frontend URL: Flutter Web build (`flutter build web`, output in `build/web`) hosted on Cloudflare Pages. Merges to `main` deploy to production automatically through CI/CD, and each pull request branch gets its own preview deployment.
 
 - Backend: Render, Railway, or another Python-compatible platform
 
 - Database and storage: Supabase
 
-The Android application is the primary product; its Flutter Web counterpart provides the required live URL using the same codebase and backend API. The final hosting provider may change depending on available resources and deployment requirements.
+The Android application is the primary product; its Flutter Web counterpart provides the required live URL using the same codebase and backend API. Cloudflare Pages replaces the earlier "Cloudflare Pages or Netlify" option (see [the sprint log](sprint-log.md)). The backend hosting provider is still open and may change depending on available resources and deployment requirements.
+
+### DevOps Tooling
+
+- Wrangler CLI (`wrangler`) is the management tool for Cloudflare Pages. It is installed as a project dev dependency through npm (Node.js required) so every contributor and the CI runner use the same version.
+
+- Local use: `wrangler login` authenticates interactively; `wrangler whoami` confirms the account.
+
+- Project setup (once): `wrangler pages project create lagaw --production-branch main`
+
+- Deploys: `wrangler pages deploy build/web --project-name lagaw --branch <branch>`. Deploying from `main` publishes to production; any other branch publishes a preview URL.
+
+- Operations: `wrangler pages deployment list --project-name lagaw` to review deploy history, and `wrangler pages deployment tail` to stream logs.
+
+- CI/CD: the pipeline runs the same `wrangler pages deploy` command after lint, tests, and `flutter build web` pass, so no deploy step is manual. The pipeline authenticates with `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` stored in the CI platform's secret store (never in the repository), using a token limited to Cloudflare Pages edit permission.
+
+- Rollback: redeploy a previous known-good commit through the same command, or promote an earlier deployment from the Cloudflare dashboard. The steps will be written into the deploy and rollback runbook the DevOps rubric requires.
 
 ## 5. RISK AND FEASIBILITY SELF-CHECK
 
@@ -410,6 +426,10 @@ Expected secrets include:
 - ROUTING_API_KEY, if the selected routing service requires one
 
 - DEEPSEEK_API_KEY
+
+- CLOUDFLARE_API_TOKEN (deploy token scoped to Cloudflare Pages edit; held in the CI secret store, and in a local `.env` only if a contributor deploys by hand with Wrangler)
+
+- CLOUDFLARE_ACCOUNT_ID
 
 Local configuration values may include:
 

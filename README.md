@@ -29,7 +29,8 @@ The recommender is our own Python model and runs on our backend. If DeepSeek is 
 | Recommender | pandas, NumPy, scikit-learn, LightFM |
 | Extraction | DeepSeek-V4.1-Flash via the official DeepSeek API (OpenAI Python SDK) |
 | Database | PostgreSQL on Supabase |
-| Hosting | Android APK for testing, web build on Cloudflare Pages or Netlify, backend on Render or Railway, Supabase for database and storage |
+| Hosting | Android APK for testing, web build on Cloudflare Pages, backend on Render or Railway, Supabase for database and storage |
+| DevOps | Wrangler CLI for managing and deploying Cloudflare Pages, run locally and from CI/CD |
 
 ## Configuration
 
