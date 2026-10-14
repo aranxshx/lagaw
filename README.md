@@ -42,6 +42,8 @@ Database schema, local migrations, and verification:
 
 Backend DeepSeek setup and verification: [step-by-step guide](docs/deepseek-setup.md).
 
+Run and verify the database-backed locations API: [setup guide](docs/locations-api.md).
+
 ## Branch Strategy
 
 Lagaw uses a simple feature-branch workflow to keep the `main` branch stable and organized.
