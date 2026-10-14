@@ -55,6 +55,10 @@ jobs:
         if: steps.project.outputs.exists == 'true'
         run: python -m compileall -q app
 
+      - name: Test backend failure handling (offline)
+        if: steps.project.outputs.exists == 'true'
+        run: python -m unittest -v
+
   frontend:
     name: Frontend - Flutter
     runs-on: ubuntu-latest
