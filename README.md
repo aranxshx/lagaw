@@ -37,6 +37,9 @@ Copy `.env.example` to `.env` and fill in your own values, including a Gemini AP
 
 Full project pitch: [docs/pitch.md](docs/pitch.md)
 
+Database schema, local migrations, and verification:
+[docs/database.md](docs/database.md).
+
 ## Branch Strategy
 
 Lagaw uses a simple feature-branch workflow to keep the `main` branch stable and organized.
