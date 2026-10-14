@@ -14,11 +14,11 @@ Lagaw (Hiligaynon for roaming around) is a swipe-based travel planner for Bacolo
 
 **Hybrid recommender.** Matrix factorization finds taste patterns across users. Content-based filtering matches your preferences to each place's category, tags, cost, group fit, setting, visit length, and accessibility. The two scores are blended, and new users lean on tags and budget until their swipes give the model more to work with.
 
-**Structured extraction.** Google Gemini turns free-text requests into structured preferences (budget level, tags, duration, pace). It only extracts. It never generates recommendations, and it is called from the backend only, never from the app.
+**Structured extraction.** DeepSeek-V4.1-Flash, accessed through the official DeepSeek API platform, turns free-text requests into structured preferences (budget level, tags, duration, pace). It only extracts. It never generates recommendations, and it is called from the backend only, never from the app.
 
 **Validated output.** Nothing from the models reaches the frontend raw. The backend checks extracted values against a schema and approved tags, then filters recommendations for inactive, duplicate, or incompatible places and applies budget, group, accessibility, and distance limits. The itinerary planner then checks operating hours, travel time, and cost for conflicts.
 
-The recommender is our own Python model and runs on our backend. If Gemini is unavailable, users fall back to the standard trip form.
+The recommender is our own Python model and runs on our backend. If DeepSeek is unavailable, users fall back to the standard trip form.
 
 ## Tech stack
 
@@ -27,15 +27,25 @@ The recommender is our own Python model and runs on our backend. If Gemini is un
 | Frontend | Flutter (Dart): Android app, plus a Flutter Web build from the same codebase |
 | Backend | FastAPI, Python |
 | Recommender | pandas, NumPy, scikit-learn, LightFM |
-| Extraction | Google Gemini API (`google-genai` SDK) |
+| Extraction | DeepSeek-V4.1-Flash via the official DeepSeek API (OpenAI Python SDK) |
 | Database | PostgreSQL on Supabase |
 | Hosting | Android APK for testing, web build on Cloudflare Pages or Netlify, backend on Render or Railway, Supabase for database and storage |
 
 ## Configuration
 
-Copy `.env.example` to `.env` and fill in your own values, including a Gemini API key (`GEMINI_API_KEY`). The `.env` file is gitignored and no secret should ever be hardcoded.
+Copy `.env.example` to `.env` and set `DEEPSEEK_API_KEY` using a key from [the DeepSeek platform](https://platform.deepseek.com/). The `.env` file is gitignored and no secret should ever be hardcoded.
+
+Backend extraction configuration:
+
+- `DEEPSEEK_API_KEY`: your private DeepSeek API key; backend only.
+- `DEEPSEEK_BASE_URL`: `https://api.deepseek.com`.
+- `DEEPSEEK_MODEL`: `deepseek-flash`, the official API model ID currently serving DeepSeek-V4.1-Flash.
+
+The planned Python integration uses the `openai` SDK with the DeepSeek base URL and API key. See [DeepSeek's API quickstart](https://api-docs.deepseek.com/) and [model documentation](https://api-docs.deepseek.com/quick_start/pricing/). These settings describe the planned integration; backend extraction code has not been implemented yet.
 
 Full project pitch: [docs/pitch.md](docs/pitch.md)
+
+Provider decision and follow-up work: [docs/sprint-log.md](docs/sprint-log.md)
 
 ## Branch Strategy
 

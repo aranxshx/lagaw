@@ -42,7 +42,7 @@ The recommendation system runs locally through the Python backend and does not d
 
 Lagaw’s LLM-related feature falls under structured output extraction.
 
-A hosted Google Gemini language model, called only through the Python backend, will convert natural-language travel requests into structured trip preferences.
+A hosted DeepSeek-V4.1-Flash language model, accessed through the official DeepSeek API platform and called only through the Python backend, will convert natural-language travel requests into structured trip preferences.
 
 For example, the user may enter:
 
@@ -132,13 +132,19 @@ Primary recommendation model:
 
 Structured output extraction:
 
-- Provider: Google Gemini Developer API
+- Provider: Official DeepSeek API platform ([platform.deepseek.com](https://platform.deepseek.com/))
 
 - Deployment: Cloud-hosted; accessed only through the Python backend
 
-- Model: `gemini-3.5-flash-lite` (configurable via environment variable)
+- Model: DeepSeek-V4.1-Flash, requested using the API model ID `deepseek-flash` (configurable via `DEEPSEEK_MODEL`)
 
-Sprint 1 will confirm provider credentials and connectivity through a single backend test call. Gemini extracts structured preferences; the self-developed Python model remains responsible for recommendations.
+- API base URL: `https://api.deepseek.com` (configurable via `DEEPSEEK_BASE_URL`)
+
+- Python SDK: `openai`, configured with the DeepSeek base URL and `DEEPSEEK_API_KEY`
+
+The API model ID and endpoint follow [DeepSeek's official quickstart](https://api-docs.deepseek.com/) and [model documentation](https://api-docs.deepseek.com/quick_start/pricing/), checked on October 14, 2026. The provider change is recorded in [the sprint log](sprint-log.md).
+
+Sprint 1 will confirm provider credentials and connectivity through a single backend test call. DeepSeek extracts structured preferences; the self-developed Python model remains responsible for recommendations.
 
 ## 3. DATABASE SCHEMA SKETCH
 
@@ -323,7 +329,7 @@ users
 
 - pandas, NumPy, scikit-learn, and LightFM for the recommendation system
 
-- Google Gemini API (`google-genai` Python SDK) for hosted structured output extraction
+- DeepSeek-V4.1-Flash through the official DeepSeek API, using the OpenAI Python SDK (`openai`) for hosted structured output extraction
 
 ### Hosting Plan
 
@@ -373,9 +379,9 @@ If hosted structured output extraction is unavailable or unreliable, users will 
 
 ### Do you already have API access or keys for the chosen AI provider?
 
-A Gemini Developer API key is required for hosted preference extraction.
+A DeepSeek API key from [platform.deepseek.com](https://platform.deepseek.com/) is required for hosted preference extraction. Credentials and backend connectivity still need to be confirmed.
 
-The primary recommendation model will run through the Python backend; Gemini will be called from the backend only.
+The primary recommendation model will run through the Python backend; DeepSeek will be called from the backend only.
 
 The team will still need to configure Supabase credentials and possibly a routing service key.
 
@@ -403,11 +409,13 @@ Expected secrets include:
 
 - ROUTING_API_KEY, if the selected routing service requires one
 
-- GEMINI_API_KEY
+- DEEPSEEK_API_KEY
 
 Local configuration values may include:
 
-- GEMINI_MODEL (for example, `gemini-3.5-flash-lite`)
+- DEEPSEEK_MODEL (default: `deepseek-flash`, currently serving DeepSeek-V4.1-Flash)
+
+- DEEPSEEK_BASE_URL (default: `https://api.deepseek.com`)
 
 - MODEL_FILE_PATH (for the self-developed recommender, if needed)
 
