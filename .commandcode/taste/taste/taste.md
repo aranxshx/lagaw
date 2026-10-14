@@ -1,0 +1,12 @@
+# Taste
+- Prefers to delegate the full Git flow to the agent end-to-end (create branch, commit, push, open PR, wait for checks, merge) rather than running the commands themselves. Confidence: 0.7
+- Values Git hygiene — wants merged branches deleted (remote and local) after merges rather than leaving them around. Confidence: 0.55
+- Prefers related changes bundled into a single branch/PR ("bunch all of this into a single branch") rather than split across multiple branches. Confidence: 0.5
+- Prefers removing superseded files/docs from the repo rather than archiving or keeping them around. Confidence: 0.45
+- Wants an AGENTS.md in repositories that declares which docs are ground truth and directs AI agents to follow repo conventions (e.g., the README branch strategy). Confidence: 0.55
+- Wants tooling conventions enforced for the whole team and their agents, documented so every contributor (and agent) follows them. Confidence: 0.6
+- Prefers `rg` (ripgrep) over `grep` and `fd` over `find`/glob for search and file discovery, and wants agents instructed to use them instead of built-in grep/glob tools. Confidence: 0.7
+- Prefers CodeGraph (colbymchenry/codegraph) for structural codebase navigation (call paths, dependencies, blast radius), with the index initialized in each repo, and wants agents to use it. Confidence: 0.6
+- Does not want AI tools adding attribution trailers (e.g. `Co-authored-by: CommandCodeBot`) to commits, and wants the tool setting that injects them disabled. Confidence: 0.75
+- Wants git history and commit messages kept free of meta-commentary or any visible sign of tooling/AI/rewrites (e.g. no "rewrite" traces, no process notes in messages). Confidence: 0.55
+- Cares how git history and PRs appear to external reviewers (e.g. course graders) and wants them to look natural/consistent, avoiding artifacts that invite questions or look flagged. Confidence: 0.5

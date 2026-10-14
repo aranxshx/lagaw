@@ -48,6 +48,7 @@ __pycache__/
 .venv/
 venv/
 env/
+.env
 .Python
 *.egg-info/
 .eggs/
@@ -101,4 +102,3 @@ $RECYCLE.BIN/
 
 .vscode
 .codegraph
-.commandcode
