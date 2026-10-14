@@ -9,6 +9,7 @@ import httpx
 
 from app.deepseek import DeepSeekFailure, extract_preferences
 
+
 class FailureTests(unittest.TestCase):
     def setUp(self):
         self.env = patch.dict(os.environ, {"DEEPSEEK_API_KEY": "test-only-placeholder"}, clear=True)

@@ -3,7 +3,7 @@
 import json
 import logging
 import sys
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from app.deepseek import ROOT, DeepSeekFailure, extract_preferences
 
@@ -11,7 +11,7 @@ from app.deepseek import ROOT, DeepSeekFailure, extract_preferences
 def main() -> int:
     logging.disable(logging.CRITICAL)
     evidence = {
-        "tested_at_utc": datetime.now(timezone.utc).isoformat(),
+        "tested_at_utc": datetime.now(UTC).isoformat(),
         "test": "backend_deepseek_connectivity",
         "live_call": True,
     }
@@ -24,7 +24,7 @@ def main() -> int:
     except DeepSeekFailure as exc:
         evidence.update(status="failed", error_code=str(exc))
         exit_code = 1
-    except Exception:
+    except Exception:  # noqa: BLE001 - Sanitize all unexpected errors in smoke-test evidence.
         # No exception text, request headers, raw responses, or traceback in evidence.
         evidence.update(status="failed", error_code="unexpected_backend_error")
         exit_code = 1
