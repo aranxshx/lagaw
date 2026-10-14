@@ -37,6 +37,9 @@ Copy `.env.example` to `.env` and fill in your own values, including a DeepSeek 
 
 Full project pitch: [docs/pitch.md](docs/pitch.md)
 
+Database schema, local migrations, and verification:
+[docs/database.md](docs/database.md).
+
 Backend DeepSeek setup and verification: [step-by-step guide](docs/deepseek-setup.md).
 
 ## Branch Strategy
