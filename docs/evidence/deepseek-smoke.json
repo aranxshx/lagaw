@@ -1,0 +1,17 @@
+{
+    "validated_response":  {
+                               "duration":  "afternoon",
+                               "budget_level":  "low",
+                               "tags":  [
+                                            "cafe",
+                                            "photography",
+                                            "relaxing"
+                                        ],
+                               "pace":  "unspecified"
+                           },
+    "live_call":  true,
+    "status":  "passed",
+    "test":  "deepseek_api_connectivity_powershell",
+    "model":  "deepseek-flash",
+    "tested_at_utc":  "2026-10-14T08:41:22.0224108Z"
+}
