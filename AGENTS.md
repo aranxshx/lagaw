@@ -36,6 +36,14 @@ Work with secrets like this instead:
 
 Only `.env.example` (placeholders) is committed; `.env` and real keys stay out of Git history.
 
+## Sprint log (mandatory)
+
+Keep [`docs/sprint-log.md`](docs/sprint-log.md) current as work happens, following the existing dated-entry format:
+
+- Record each project activity as it occurs: accounts and infrastructure set up, credential handoffs, provider or hosting decisions, and scope changes with their reasons.
+- Name who holds a credential, never the credential itself — secret values never go in the log.
+- Fill in the plan, standup, and retrospective sections as each sprint progresses. The log is evidence for consultations, so record what actually happened, not filler.
+
 ## Git conventions
 
 Follow the branch strategy in [`README.md`](README.md#branch-strategy):
