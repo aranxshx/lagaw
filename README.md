@@ -45,6 +45,9 @@ Backend DeepSeek setup and verification: [step-by-step guide](docs/deepseek-setu
 
 Run and verify the database-backed locations API: [setup guide](docs/locations-api.md).
 
+Connect Flutter Web to FastAPI locally and on Cloudflare Pages:
+[CORS setup and verification](docs/cors.md).
+
 Provider decision and follow-up work: [docs/sprint-log.md](docs/sprint-log.md)
 
 ## Branch Strategy
