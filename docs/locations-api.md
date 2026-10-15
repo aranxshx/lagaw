@@ -58,6 +58,10 @@ While the server runs, open <http://127.0.0.1:8000/docs>. Expand `GET /locations
 choose **Try it out**, use `limit=10` and `offset=0`, then **Execute**. Expect HTTP
 200 and ten database records under `items` if all ten remain active.
 
+For Flutter Web running on a different origin, also follow
+[the CORS guide](cors.md). Success in `/docs` or PowerShell alone does not verify
+that a browser page on another origin can read the API response.
+
 You can also check in a **second PowerShell terminal**:
 
 ```powershell

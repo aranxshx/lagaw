@@ -441,7 +441,7 @@ Local configuration values may include:
 
 - API_BASE_URL (public Flutter API endpoint, supplied at build time for web/Android builds; for the web build it comes from the `API_BASE_URL` GitHub Actions variable)
 
-- CORS_ALLOW_ORIGINS (optional, comma-separated extra browser origins for the backend; Cloudflare Pages sites and localhost are always allowed)
+- CORS_ALLOWED_ORIGINS (exact frontend origins the backend permits, comma-separated, no wildcards; on Cloud Run it comes from the `CORS_ALLOWED_ORIGINS` GitHub Actions variable, currently `https://lagaw.pages.dev`. See [CORS setup](cors.md))
 
 - WEB_APP_URL
 
