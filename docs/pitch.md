@@ -337,11 +337,11 @@ users
 
 - Public frontend URL: Flutter Web build (`flutter build web`, output in `frontend/build/web`) hosted on Cloudflare Pages. Merges to `main` that change the frontend deploy to production automatically through CI/CD, and each pull request that changes the frontend gets its own preview deployment.
 
-- Backend: Render, Railway, or another Python-compatible platform
+- Backend: FastAPI container on Google Cloud Run (project `relax-mode-lagaw`, region `asia-southeast1`), scaling to zero with at most 2 instances. Supabase credentials live in Google Secret Manager, and GitHub Actions deploys through Workload Identity Federation, so no cloud keys are stored in GitHub.
 
 - Database and storage: Supabase
 
-The Android application is the primary product; its Flutter Web counterpart provides the required live URL using the same codebase and backend API. Cloudflare Pages replaces the earlier "Cloudflare Pages or Netlify" option (see [the sprint log](sprint-log.md)). The backend hosting provider is still open and may change depending on available resources and deployment requirements.
+The Android application is the primary product; its Flutter Web counterpart provides the required live URL using the same codebase and backend API. Cloudflare Pages replaces the earlier "Cloudflare Pages or Netlify" option (see [the sprint log](sprint-log.md)). Backend hosting moved from the open "Render or Railway" option to Google Cloud Run (see [the sprint log](sprint-log.md)).
 
 ### DevOps Tooling
 
@@ -439,7 +439,9 @@ Local configuration values may include:
 
 - MODEL_FILE_PATH (for the self-developed recommender, if needed)
 
-- API_BASE_URL (public Flutter API endpoint, supplied at build time for web/Android builds)
+- API_BASE_URL (public Flutter API endpoint, supplied at build time for web/Android builds; for the web build it comes from the `API_BASE_URL` GitHub Actions variable)
+
+- CORS_ALLOWED_ORIGINS (exact frontend origins the backend permits, comma-separated, no wildcards; on Cloud Run it comes from the `CORS_ALLOWED_ORIGINS` GitHub Actions variable, currently `https://lagaw.pages.dev`. See [CORS setup](cors.md))
 
 - WEB_APP_URL
 
