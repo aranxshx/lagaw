@@ -6,6 +6,7 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -59,6 +60,9 @@ jobs:
     name: Frontend - Flutter
     runs-on: ubuntu-latest
 
+    outputs:
+      exists: ${{ steps.project.outputs.exists }}
+
     defaults:
       run:
         working-directory: frontend
@@ -106,3 +110,107 @@ jobs:
       - name: Build Android APK
         if: steps.project.outputs.exists == 'true'
         run: flutter build apk --debug
+
+      - name: Upload web build
+        if: steps.project.outputs.exists == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-build
+          path: frontend/build/web
+          if-no-files-found: error
+
+  # Reuses the web build from the frontend job, so each run builds once.
+  # main publishes to production; same-repo pull requests publish a preview.
+  deploy-web:
+    name: Deploy - Cloudflare Pages
+    needs: frontend
+    if: >-
+      needs.frontend.outputs.exists == 'true' &&
+      (github.event_name != 'pull_request' ||
+      github.event.pull_request.head.repo.full_name == github.repository)
+    runs-on: ubuntu-latest
+
+    concurrency:
+      group: deploy-web-${{ github.head_ref || github.ref_name }}
+      cancel-in-progress: false
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # Every check skips with a visible reason instead of failing, so CI stays
+      # green until there is something real to serve.
+      - name: Decide whether to deploy
+        id: gate
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          BEFORE_SHA: ${{ github.event.before }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          skip() {
+            echo "deploy=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::Skipping deploy: $1"
+            echo "Deploy skipped: $1" >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          }
+
+          [ -f frontend/web/index.html ] || skip "the Flutter project has no web platform (run 'flutter create --platforms=web .' in frontend/)."
+          [ -n "$CLOUDFLARE_API_TOKEN" ] && [ -n "$CLOUDFLARE_ACCOUNT_ID" ] || skip "CLOUDFLARE_API_TOKEN / CLOUDFLARE_ACCOUNT_ID are not set."
+
+          # Only app changes deploy: the frontend (minus its tests) and deploy config.
+          # Docs-only and test-only merges therefore never publish. Manual runs always
+          # deploy, and so does any case where the diff cannot be computed.
+          zeros=0000000000000000000000000000000000000000
+          range=""
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            range="$BASE_SHA...$HEAD_SHA"
+          elif [ "$EVENT_NAME" = "push" ] && [ -n "$BEFORE_SHA" ] && [ "$BEFORE_SHA" != "$zeros" ]; then
+            range="$BEFORE_SHA..$GITHUB_SHA"
+          fi
+
+          if [ -n "$range" ]; then
+            if ! files=$(git diff --name-only "$range" 2>/dev/null); then
+              echo "::warning::Could not compute the changed files; deploying anyway."
+            else
+              changed=$(echo "$files" | grep -E '^(frontend/|package(-lock)?\.json$|\.github/workflows/ci\.yml$)' | grep -vE '^frontend/test/' || true)
+              [ -n "$changed" ] || skip "no frontend or deploy-config changes (docs-only and test-only changes do not deploy)."
+            fi
+          fi
+
+          echo "deploy=true" >> "$GITHUB_OUTPUT"
+
+      - name: Download web build
+        if: steps.gate.outputs.deploy == 'true'
+        uses: actions/download-artifact@v4
+        with:
+          name: web-build
+          path: frontend/build/web
+
+      - name: Set up Node.js
+        if: steps.gate.outputs.deploy == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install Wrangler
+        if: steps.gate.outputs.deploy == 'true'
+        run: npm ci
+
+      - name: Deploy to Cloudflare Pages
+        if: steps.gate.outputs.deploy == 'true'
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          DEPLOY_BRANCH: ${{ github.head_ref || github.ref_name }}
+        run: |
+          set -eo pipefail
+          npx wrangler pages deploy frontend/build/web             --project-name lagaw             --branch "$DEPLOY_BRANCH"             --commit-hash "$GITHUB_SHA"             --commit-dirty=true | tee deploy.log
+          url=$(grep -Eo 'https://[A-Za-z0-9.-]+\.pages\.dev' deploy.log | tail -1 || true)
+          echo "### Cloudflare Pages deployment ($DEPLOY_BRANCH)" >> "$GITHUB_STEP_SUMMARY"
+          echo "$url" >> "$GITHUB_STEP_SUMMARY"
