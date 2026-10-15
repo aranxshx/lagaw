@@ -22,6 +22,28 @@ This repository is indexed with CodeGraph. Use these tools, in this order:
 
 If `.codegraph/` is missing, run `codegraph init` in the repository root first. Setup for all of this: [`docs/tooling.md`](docs/tooling.md).
 
+## Secrets and environment files (mandatory)
+
+Never read raw values from `.env` or any other secret store; a value that reaches a command output, log, or transcript is exposed, so treat transcripts as public. Reading `.env` with `read_file`, `cat`/`type`/`Get-Content`, `git show`, or `echo` is forbidden. The variable names and their purpose live in [`docs/pitch.md`](docs/pitch.md) §6 and `.env.example`.
+
+Work with secrets like this instead:
+
+1. **Read the shape, not the values.** Learn names from `.env.example`; never open `.env` itself.
+2. **Check presence by name only.** `rg -o "^[A-Za-z_][A-Za-z0-9_]*=" .env` lists `NAME=` lines with no values; `rg -c "^DEEPSEEK_API_KEY=" .env` prints a match count. If a masked view is truly unavoidable, scrub it first with `sed -E "s/=.*/=<redacted>/" .env` — lines without `=` pass through unredacted, so prefer the name-only checks.
+3. **Let the shell carry secrets.** When a command needs a value, reference it through the environment (`$env:DEEPSEEK_API_KEY` in PowerShell, `$DEEPSEEK_API_KEY` elsewhere); the shell expands it and the value never passes through the agent.
+4. **Exercise the app, not the key.** To verify provider connectivity, run the backend or its tests — they read the environment themselves — and inspect the result, not the key.
+5. **React to leaks.** If a real secret ever appears in output, a commit, or a transcript, stop, tell the user, and treat the key as compromised — rotate it.
+
+Only `.env.example` (placeholders) is committed; `.env` and real keys stay out of Git history.
+
+## Sprint log (mandatory)
+
+Keep [`docs/sprint-log.md`](docs/sprint-log.md) current as work happens, following the existing dated-entry format:
+
+- Record each project activity as it occurs: accounts and infrastructure set up, credential handoffs, provider or hosting decisions, and scope changes with their reasons.
+- Name who holds a credential, never the credential itself — secret values never go in the log.
+- Fill in the plan, standup, and retrospective sections as each sprint progresses. The log is evidence for consultations, so record what actually happened, not filler.
+
 ## Git conventions
 
 Follow the branch strategy in [`README.md`](README.md#branch-strategy):

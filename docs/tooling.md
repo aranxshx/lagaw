@@ -28,6 +28,26 @@ Team setup for the tools every contributor (and their AI agent) should have. `AG
 
 4. **Verify** with `codegraph status`; update with `codegraph upgrade`.
 
+## Wrangler (Cloudflare Pages)
+
+[Wrangler](https://developers.cloudflare.com/workers/wrangler/) is Cloudflare's CLI. Lagaw uses it to create, deploy, and inspect the Cloudflare Pages project that hosts the Flutter Web build. The DevOps Engineer owns the Cloudflare account and deploy token; other contributors only need Wrangler if they deploy a preview by hand.
+
+1. **Prerequisite**: Node.js (current LTS) and npm.
+
+2. **Install**: `npm i -D wrangler` in the repository root, so everyone and CI share one pinned version. Run it with `npx wrangler ...`. A global install (`npm i -g wrangler`) also works.
+
+3. **Authenticate**: `npx wrangler login` opens a browser sign-in; confirm with `npx wrangler whoami`. For CI and other non-interactive use, set `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` in the environment instead. Never commit either value.
+
+4. **Common commands**
+   ```sh
+   npx wrangler pages project create lagaw --production-branch main   # once
+   flutter build web
+   npx wrangler pages deploy build/web --project-name lagaw --branch <branch>
+   npx wrangler pages deployment list --project-name lagaw
+   ```
+
+Deploys from `main` go to production; other branches get a preview URL. See [the pitch](pitch.md#hosting-plan) for the full DevOps plan.
+
 ## ripgrep and fd
 
 `rg` replaces `grep`, and `fd` replaces `find`/glob file discovery — both faster and `.gitignore`-aware. Agents are instructed to use these instead of the built-in grep/glob tools.

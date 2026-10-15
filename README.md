@@ -14,7 +14,7 @@ Lagaw (Hiligaynon for roaming around) is a swipe-based travel planner for Bacolo
 
 **Hybrid recommender.** Matrix factorization finds taste patterns across users. Content-based filtering matches your preferences to each place's category, tags, cost, group fit, setting, visit length, and accessibility. The two scores are blended, and new users lean on tags and budget until their swipes give the model more to work with.
 
-**Structured extraction.** DeepSeek turns free-text requests into structured preferences (budget level, tags, duration, pace). It only extracts. It never generates recommendations, and it is called from the backend only, never from the app.
+**Structured extraction.** DeepSeek-V4.1-Flash, accessed through the official DeepSeek API platform, turns free-text requests into structured preferences (budget level, tags, duration, pace). It only extracts. It never generates recommendations, and it is called from the backend only, never from the app.
 
 **Validated output.** Nothing from the models reaches the frontend raw. The backend checks extracted values against a schema and approved tags, then filters recommendations for inactive, duplicate, or incompatible places and applies budget, group, accessibility, and distance limits. The itinerary planner then checks operating hours, travel time, and cost for conflicts.
 
@@ -27,9 +27,10 @@ The recommender is our own Python model and runs on our backend. If DeepSeek is 
 | Frontend | Flutter (Dart): Android app, plus a Flutter Web build from the same codebase |
 | Backend | FastAPI, Python |
 | Recommender | pandas, NumPy, scikit-learn, LightFM |
-| Extraction | DeepSeek API (`httpx` SDK) |
+| Extraction | DeepSeek-V4.1-Flash via the official DeepSeek API (`httpx`) |
 | Database | PostgreSQL on Supabase |
-| Hosting | Android APK for testing, web build on Cloudflare Pages or Netlify, backend on Render or Railway, Supabase for database and storage |
+| Hosting | Android APK for testing, web build on Cloudflare Pages, backend on Render or Railway, Supabase for database and storage |
+| DevOps | Wrangler CLI for managing and deploying Cloudflare Pages, run locally and from CI/CD |
 
 ## Configuration
 
@@ -43,6 +44,8 @@ Database schema, local migrations, and verification:
 Backend DeepSeek setup and verification: [step-by-step guide](docs/deepseek-setup.md).
 
 Run and verify the database-backed locations API: [setup guide](docs/locations-api.md).
+
+Provider decision and follow-up work: [docs/sprint-log.md](docs/sprint-log.md)
 
 ## Branch Strategy
 

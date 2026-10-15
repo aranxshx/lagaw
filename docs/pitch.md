@@ -42,7 +42,7 @@ The recommendation system runs locally through the Python backend and does not d
 
 Lagaw’s LLM-related feature falls under structured output extraction.
 
-A hosted DeepSeek language model, called only through the Python backend, will convert natural-language travel requests into structured trip preferences.
+A hosted DeepSeek-V4.1-Flash language model, accessed through the official DeepSeek API platform and called only through the Python backend, will convert natural-language travel requests into structured trip preferences.
 
 For example, the user may enter:
 
@@ -132,11 +132,17 @@ Primary recommendation model:
 
 Structured output extraction:
 
-- Provider: DeepSeek API
+- Provider: Official DeepSeek API platform ([platform.deepseek.com](https://platform.deepseek.com/))
 
 - Deployment: Cloud-hosted; accessed only through the Python backend
 
-- Model: `deepseek-flash` (configurable via environment variable)
+- Model: DeepSeek-V4.1-Flash, requested using the API model ID `deepseek-flash` (configurable via `DEEPSEEK_MODEL`)
+
+- API endpoint: `https://api.deepseek.com/chat/completions`
+
+- Python client: `httpx`, authenticated with `DEEPSEEK_API_KEY`; request timeout set by `DEEPSEEK_TIMEOUT_MS` (default 30000)
+
+The API model ID and endpoint follow [DeepSeek's official quickstart](https://api-docs.deepseek.com/) and [model documentation](https://api-docs.deepseek.com/quick_start/pricing/), checked on October 14, 2026. The provider change is recorded in [the sprint log](sprint-log.md).
 
 Sprint 1 will confirm provider credentials and connectivity through a single backend test call. DeepSeek extracts structured preferences; the self-developed Python model remains responsible for recommendations.
 
@@ -323,19 +329,35 @@ users
 
 - pandas, NumPy, scikit-learn, and LightFM for the recommendation system
 
-- DeepSeek API (`httpx` Python SDK) for hosted structured output extraction
+- DeepSeek-V4.1-Flash through the official DeepSeek API, called with `httpx`, for hosted structured output extraction
 
 ### Hosting Plan
 
 - Android app: Flutter Android APK build, distributed for testing
 
-- Public frontend URL: Flutter Web build hosted on Cloudflare Pages or Netlify, deployed automatically from the main branch through CI/CD
+- Public frontend URL: Flutter Web build (`flutter build web`, output in `build/web`) hosted on Cloudflare Pages. Merges to `main` deploy to production automatically through CI/CD, and each pull request branch gets its own preview deployment.
 
 - Backend: Render, Railway, or another Python-compatible platform
 
 - Database and storage: Supabase
 
-The Android application is the primary product; its Flutter Web counterpart provides the required live URL using the same codebase and backend API. The final hosting provider may change depending on available resources and deployment requirements.
+The Android application is the primary product; its Flutter Web counterpart provides the required live URL using the same codebase and backend API. Cloudflare Pages replaces the earlier "Cloudflare Pages or Netlify" option (see [the sprint log](sprint-log.md)). The backend hosting provider is still open and may change depending on available resources and deployment requirements.
+
+### DevOps Tooling
+
+- Wrangler CLI (`wrangler`) is the management tool for Cloudflare Pages. It is installed as a project dev dependency through npm (Node.js required) so every contributor and the CI runner use the same version.
+
+- Local use: `wrangler login` authenticates interactively; `wrangler whoami` confirms the account.
+
+- Project setup (once): `wrangler pages project create lagaw --production-branch main`
+
+- Deploys: `wrangler pages deploy build/web --project-name lagaw --branch <branch>`. Deploying from `main` publishes to production; any other branch publishes a preview URL.
+
+- Operations: `wrangler pages deployment list --project-name lagaw` to review deploy history, and `wrangler pages deployment tail` to stream logs.
+
+- CI/CD: the pipeline runs the same `wrangler pages deploy` command after lint, tests, and `flutter build web` pass, so no deploy step is manual. The pipeline authenticates with `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` stored in the CI platform's secret store (never in the repository), using a token limited to Cloudflare Pages edit permission.
+
+- Rollback: redeploy a previous known-good commit through the same command, or promote an earlier deployment from the Cloudflare dashboard. The steps will be written into the deploy and rollback runbook the DevOps rubric requires.
 
 ## 5. RISK AND FEASIBILITY SELF-CHECK
 
@@ -373,7 +395,7 @@ If hosted structured output extraction is unavailable or unreliable, users will 
 
 ### Do you already have API access or keys for the chosen AI provider?
 
-A DeepSeek API key is required for hosted preference extraction.
+A DeepSeek API key from [platform.deepseek.com](https://platform.deepseek.com/) is required for hosted preference extraction. Credentials and backend connectivity still need to be confirmed.
 
 The primary recommendation model will run through the Python backend; DeepSeek will be called from the backend only.
 
@@ -405,9 +427,15 @@ Expected secrets include:
 
 - DEEPSEEK_API_KEY
 
+- CLOUDFLARE_API_TOKEN (deploy token scoped to Cloudflare Pages edit; held in the CI secret store, and in a local `.env` only if a contributor deploys by hand with Wrangler)
+
+- CLOUDFLARE_ACCOUNT_ID
+
 Local configuration values may include:
 
-- DEEPSEEK_MODEL (for example, `deepseek-flash`)
+- DEEPSEEK_MODEL (default: `deepseek-flash`, currently serving DeepSeek-V4.1-Flash)
+
+- DEEPSEEK_TIMEOUT_MS (default: 30000)
 
 - MODEL_FILE_PATH (for the self-developed recommender, if needed)
 
