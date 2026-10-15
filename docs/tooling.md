@@ -48,6 +48,19 @@ Team setup for the tools every contributor (and their AI agent) should have. `AG
 
 Deploys with `--branch main` go to production (`https://lagaw.pages.dev`); other branch names get a preview URL. In CI, the `deploy-web` job in `.github/workflows/ci.yml` does this automatically, reusing the Flutter job's build: `main` goes to production, same-repo pull requests get a preview, and docs-only or test-only changes (and anything without a Flutter project yet) are skipped. Best practices not yet adopted are tracked in [CI/CD best practices](cicd-best-practices.md). See [the pitch](pitch.md#hosting-plan) for the full DevOps plan.
 
+## Google Cloud (backend on Cloud Run)
+
+The FastAPI backend runs on Cloud Run in project `relax-mode-lagaw` (region `asia-southeast1`, service `lagaw-api`). Images live in Artifact Registry (`lagaw/api`, keeping the 5 newest), and the Supabase credentials are Secret Manager secrets (`SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`) mounted into the service. `.github/workflows/deploy-backend.yml` builds and deploys on backend changes merged to `main`, authenticating with Workload Identity Federation (Google Cloud only trusts this repository's `main` branch). The non-secret IDs are GitHub Actions variables (`GCP_*`).
+
+Useful commands (`gcloud auth login` first; add `--project relax-mode-lagaw --region asia-southeast1`):
+```sh
+gcloud run services describe lagaw-api                      # URL and current revision
+gcloud run revisions list --service lagaw-api               # deploy history
+gcloud run services logs read lagaw-api --limit 50          # recent logs
+gcloud run services update-traffic lagaw-api --to-revisions <good-revision>=100   # roll back
+```
+Rolling forward is also possible by re-running the `Deploy Backend` workflow on an earlier commit's image tag. Cost guards: `min-instances=0`, `max-instances=2`, and a small budget alert on the project; budgets only alert, they do not stop spending.
+
 ## ripgrep and fd
 
 `rg` replaces `grep`, and `fd` replaces `find`/glob file discovery — both faster and `.gitignore`-aware. Agents are instructed to use these instead of the built-in grep/glob tools.
