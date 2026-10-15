@@ -1,14 +1,35 @@
 """Lagaw's FastAPI entry point."""
 
+import os
 from typing import Annotated
 
 from fastapi import Depends, FastAPI, Query, Request
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from app.database import DatabaseUnavailable, LocationDatabase, get_database
 from app.schemas import LocationsPage
 
 app = FastAPI(title="Lagaw API", version="0.1.0")
+
+# The Flutter Web app calls this API from the browser. Allow the production and
+# preview sites on Cloudflare Pages and local development servers; extra origins
+# can be added with CORS_ALLOW_ORIGINS (comma-separated). The API is read-only.
+CORS_ORIGIN_REGEX = (
+    r"https://([a-z0-9-]+\.)?lagaw\.pages\.dev"
+    r"|https?://(localhost|127\.0\.0\.1)(:\d+)?"
+)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        origin.strip()
+        for origin in os.environ.get("CORS_ALLOW_ORIGINS", "").split(",")
+        if origin.strip()
+    ],
+    allow_origin_regex=CORS_ORIGIN_REGEX,
+    allow_methods=["GET"],
+    allow_headers=["*"],
+)
 
 
 @app.exception_handler(DatabaseUnavailable)
