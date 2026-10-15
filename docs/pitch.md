@@ -138,9 +138,9 @@ Structured output extraction:
 
 - Model: DeepSeek-V4.1-Flash, requested using the API model ID `deepseek-flash` (configurable via `DEEPSEEK_MODEL`)
 
-- API base URL: `https://api.deepseek.com` (configurable via `DEEPSEEK_BASE_URL`)
+- API endpoint: `https://api.deepseek.com/chat/completions`
 
-- Python SDK: `openai`, configured with the DeepSeek base URL and `DEEPSEEK_API_KEY`
+- Python client: `httpx`, authenticated with `DEEPSEEK_API_KEY`; request timeout set by `DEEPSEEK_TIMEOUT_MS` (default 30000)
 
 The API model ID and endpoint follow [DeepSeek's official quickstart](https://api-docs.deepseek.com/) and [model documentation](https://api-docs.deepseek.com/quick_start/pricing/), checked on October 14, 2026. The provider change is recorded in [the sprint log](sprint-log.md).
 
@@ -329,7 +329,7 @@ users
 
 - pandas, NumPy, scikit-learn, and LightFM for the recommendation system
 
-- DeepSeek-V4.1-Flash through the official DeepSeek API, using the OpenAI Python SDK (`openai`) for hosted structured output extraction
+- DeepSeek-V4.1-Flash through the official DeepSeek API, called with `httpx`, for hosted structured output extraction
 
 ### Hosting Plan
 
@@ -435,7 +435,7 @@ Local configuration values may include:
 
 - DEEPSEEK_MODEL (default: `deepseek-flash`, currently serving DeepSeek-V4.1-Flash)
 
-- DEEPSEEK_BASE_URL (default: `https://api.deepseek.com`)
+- DEEPSEEK_TIMEOUT_MS (default: 30000)
 
 - MODEL_FILE_PATH (for the self-developed recommender, if needed)
 
