@@ -1,0 +1,8 @@
+{
+  "name": "lagaw",
+  "private": true,
+  "description": "Repository tooling for Lagaw (Wrangler for Cloudflare Pages deploys).",
+  "devDependencies": {
+    "wrangler": "4.151.0"
+  }
+}

@@ -103,3 +103,5 @@ $RECYCLE.BIN/
 .vscode
 .codegraph
 .commandcode
+node_modules/
+.wrangler/
