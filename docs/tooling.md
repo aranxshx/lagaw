@@ -34,19 +34,19 @@ Team setup for the tools every contributor (and their AI agent) should have. `AG
 
 1. **Prerequisite**: Node.js (current LTS) and npm.
 
-2. **Install**: `npm i -D wrangler` in the repository root, so everyone and CI share one pinned version. Run it with `npx wrangler ...`. A global install (`npm i -g wrangler`) also works.
+2. **Install**: Wrangler is pinned in the root `package.json` (`wrangler@4.151.0`). Run `npm ci` in the repository root, then use `npx wrangler ...`, so everyone and CI share one version. A global install (`npm i -g wrangler`) also works but may differ in version.
 
-3. **Authenticate**: `npx wrangler login` opens a browser sign-in; confirm with `npx wrangler whoami`. For CI and other non-interactive use, set `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` in the environment instead. Never commit either value.
+3. **Authenticate**: `npx wrangler login` opens a browser sign-in; confirm with `npx wrangler whoami`. `wrangler login` is an OAuth session for local use only. For CI and other non-interactive use, set `CLOUDFLARE_API_TOKEN` (a token scoped to Cloudflare Pages edit, created in the Cloudflare dashboard) and `CLOUDFLARE_ACCOUNT_ID` in the environment instead. In CI they come from GitHub Actions secrets (repository admin: Settings → Secrets and variables → Actions); for a manual deploy, put them in the gitignored `.env`. Never commit either value.
 
 4. **Common commands**
    ```sh
-   npx wrangler pages project create lagaw --production-branch main   # once
-   flutter build web
-   npx wrangler pages deploy build/web --project-name lagaw --branch <branch>
+   npx wrangler pages project create lagaw --production-branch main --force   # once, already done; --force is only needed for this first creation
+   cd frontend && flutter build web && cd ..
+   npx wrangler pages deploy frontend/build/web --project-name lagaw --branch <branch>
    npx wrangler pages deployment list --project-name lagaw
    ```
 
-Deploys from `main` go to production; other branches get a preview URL. See [the pitch](pitch.md#hosting-plan) for the full DevOps plan.
+Deploys with `--branch main` go to production (`https://lagaw.pages.dev`); other branch names get a preview URL. In CI, the `deploy-web` job in `.github/workflows/ci.yml` does this automatically, reusing the Flutter job's build: `main` goes to production, same-repo pull requests get a preview, and docs-only or test-only changes (and anything without a Flutter project yet) are skipped. Best practices not yet adopted are tracked in [CI/CD best practices](cicd-best-practices.md). See [the pitch](pitch.md#hosting-plan) for the full DevOps plan.
 
 ## ripgrep and fd
 

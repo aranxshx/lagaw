@@ -335,7 +335,7 @@ users
 
 - Android app: Flutter Android APK build, distributed for testing
 
-- Public frontend URL: Flutter Web build (`flutter build web`, output in `build/web`) hosted on Cloudflare Pages. Merges to `main` deploy to production automatically through CI/CD, and each pull request branch gets its own preview deployment.
+- Public frontend URL: Flutter Web build (`flutter build web`, output in `frontend/build/web`) hosted on Cloudflare Pages. Merges to `main` that change the frontend deploy to production automatically through CI/CD, and each pull request that changes the frontend gets its own preview deployment.
 
 - Backend: Render, Railway, or another Python-compatible platform
 
@@ -349,13 +349,13 @@ The Android application is the primary product; its Flutter Web counterpart prov
 
 - Local use: `wrangler login` authenticates interactively; `wrangler whoami` confirms the account.
 
-- Project setup (once): `wrangler pages project create lagaw --production-branch main`
+- Project setup (once, done): `wrangler pages project create lagaw --production-branch main`. Wrangler 4.151 delegates new Pages projects to Cloudflare Workers and fails, so the one-time creation needed `--force` to create classic Pages; later commands run without it. Production URL: `https://lagaw.pages.dev`.
 
-- Deploys: `wrangler pages deploy build/web --project-name lagaw --branch <branch>`. Deploying from `main` publishes to production; any other branch publishes a preview URL.
+- Deploys: `wrangler pages deploy frontend/build/web --project-name lagaw --branch <branch>`. Deploying with `--branch main` publishes to production; any other branch name publishes a preview URL.
 
 - Operations: `wrangler pages deployment list --project-name lagaw` to review deploy history, and `wrangler pages deployment tail` to stream logs.
 
-- CI/CD: the pipeline runs the same `wrangler pages deploy` command after lint, tests, and `flutter build web` pass, so no deploy step is manual. The pipeline authenticates with `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` stored in the CI platform's secret store (never in the repository), using a token limited to Cloudflare Pages edit permission.
+- CI/CD: GitHub Actions (`.github/workflows/ci.yml`). The `frontend` job builds Flutter Web once per run and uploads it as an artifact; a `deploy-web` job then downloads that same build and runs `wrangler pages deploy`, so nothing is built twice and no deploy step is manual. Pushes to `main` deploy to production; pull requests from branches in this repository deploy a preview (fork PRs are skipped because GitHub withholds secrets from them). The deploy job compares the changed files and only publishes when the frontend (excluding `frontend/test/`), `package.json`, `package-lock.json`, or `ci.yml` changed, so docs-only and test-only merges never deploy; the CI checks themselves still run on every pull request. It skips with a visible warning, staying green, when the Flutter project or its web platform does not exist yet or the Cloudflare secrets are unset, and it can be run by hand with `workflow_dispatch`. It authenticates with `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` stored as GitHub Actions secrets (repository Settings → Secrets and variables → Actions; never in the repository), using a token limited to Cloudflare Pages edit permission. Adding secrets requires repository admin access. Improvements not yet made are listed in [CI/CD best practices](cicd-best-practices.md).
 
 - Rollback: redeploy a previous known-good commit through the same command, or promote an earlier deployment from the Cloudflare dashboard. The steps will be written into the deploy and rollback runbook the DevOps rubric requires.
 
@@ -427,7 +427,7 @@ Expected secrets include:
 
 - DEEPSEEK_API_KEY
 
-- CLOUDFLARE_API_TOKEN (deploy token scoped to Cloudflare Pages edit; held in the CI secret store, and in a local `.env` only if a contributor deploys by hand with Wrangler)
+- CLOUDFLARE_API_TOKEN (deploy token scoped to Cloudflare Pages edit; held in GitHub Actions secrets, and in a local `.env` only if a contributor deploys by hand with Wrangler)
 
 - CLOUDFLARE_ACCOUNT_ID
 

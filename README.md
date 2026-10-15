@@ -30,7 +30,7 @@ The recommender is our own Python model and runs on our backend. If DeepSeek is 
 | Extraction | DeepSeek-V4.1-Flash via the official DeepSeek API (OpenAI Python SDK) |
 | Database | PostgreSQL on Supabase |
 | Hosting | Android APK for testing, web build on Cloudflare Pages, backend on Render or Railway, Supabase for database and storage |
-| DevOps | Wrangler CLI for managing and deploying Cloudflare Pages, run locally and from CI/CD |
+| DevOps | GitHub Actions CI/CD; Wrangler CLI for managing and deploying Cloudflare Pages, run locally and from CI/CD |
 
 ## Configuration
 
