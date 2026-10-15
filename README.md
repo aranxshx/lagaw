@@ -27,24 +27,23 @@ The recommender is our own Python model and runs on our backend. If DeepSeek is 
 | Frontend | Flutter (Dart): Android app, plus a Flutter Web build from the same codebase |
 | Backend | FastAPI, Python |
 | Recommender | pandas, NumPy, scikit-learn, LightFM |
-| Extraction | DeepSeek-V4.1-Flash via the official DeepSeek API (OpenAI Python SDK) |
+| Extraction | DeepSeek-V4.1-Flash via the official DeepSeek API (`httpx`) |
 | Database | PostgreSQL on Supabase |
 | Hosting | Android APK for testing, web build on Cloudflare Pages, backend on Render or Railway, Supabase for database and storage |
 | DevOps | GitHub Actions CI/CD; Wrangler CLI for managing and deploying Cloudflare Pages, run locally and from CI/CD |
 
 ## Configuration
 
-Copy `.env.example` to `.env` and set `DEEPSEEK_API_KEY` using a key from [the DeepSeek platform](https://platform.deepseek.com/). The `.env` file is gitignored and no secret should ever be hardcoded.
-
-Backend extraction configuration:
-
-- `DEEPSEEK_API_KEY`: your private DeepSeek API key; backend only.
-- `DEEPSEEK_BASE_URL`: `https://api.deepseek.com`.
-- `DEEPSEEK_MODEL`: `deepseek-flash`, the official API model ID currently serving DeepSeek-V4.1-Flash.
-
-The planned Python integration uses the `openai` SDK with the DeepSeek base URL and API key. See [DeepSeek's API quickstart](https://api-docs.deepseek.com/) and [model documentation](https://api-docs.deepseek.com/quick_start/pricing/). These settings describe the planned integration; backend extraction code has not been implemented yet.
+Copy `.env.example` to `.env` and fill in your own values, including a DeepSeek API key (`DEEPSEEK_API_KEY`). The `.env` file is gitignored and no secret should ever be hardcoded.
 
 Full project pitch: [docs/pitch.md](docs/pitch.md)
+
+Database schema, local migrations, and verification:
+[docs/database.md](docs/database.md).
+
+Backend DeepSeek setup and verification: [step-by-step guide](docs/deepseek-setup.md).
+
+Run and verify the database-backed locations API: [setup guide](docs/locations-api.md).
 
 Provider decision and follow-up work: [docs/sprint-log.md](docs/sprint-log.md)
 

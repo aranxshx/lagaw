@@ -1,0 +1,3 @@
+# Classify backend imports consistently from the repository root and in CI.
+[lint.isort]
+known-first-party = ["app"]
